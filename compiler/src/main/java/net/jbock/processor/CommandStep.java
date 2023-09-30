@@ -37,6 +37,7 @@ final class CommandStep implements Step {
     private final Messager messager;
     private final Util util;
     private final SourceFileGenerator sourceFileGenerator;
+    private final ShellCompletionGenerator shellCompletionGenerator;
     private final TypeTool tool;
 
     @Inject
@@ -44,10 +45,12 @@ final class CommandStep implements Step {
             ProcessingEnvironment processingEnvironment,
             Util util,
             SourceFileGenerator sourceFileGenerator,
+            ShellCompletionGenerator shellCompletionGenerator,
             TypeTool tool) {
         this.messager = processingEnvironment.getMessager();
         this.util = util;
         this.sourceFileGenerator = sourceFileGenerator;
+        this.shellCompletionGenerator = shellCompletionGenerator;
         this.tool = tool;
     }
 
@@ -92,6 +95,7 @@ final class CommandStep implements Step {
                 .skipJavaLangImports(true)
                 .build();
         sourceFileGenerator.write(sourceElement, javaFile);
+        shellCompletionGenerator.write();
     }
 
     private Either<List<ValidationFailure>, SourceElement> validateSourceElement(
