@@ -8,6 +8,7 @@ import javax.tools.JavaFileManager;
 import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 public class ShellCompletionGenerator {
     private final Filer filer;
@@ -19,12 +20,13 @@ public class ShellCompletionGenerator {
 
     public void write() {
         try {
-            var resource = filer.createResource(StandardLocation.CLASS_OUTPUT, "foo.bar", "baz");
+            var resource = filer.createResource(StandardLocation.CLASS_OUTPUT, "foo.bar", UUID.randomUUID() + ".txt");
             try (var os = resource.openOutputStream()) {
                 os.write("Hello\n".getBytes(StandardCharsets.UTF_8));
             } catch (RuntimeException e) {
                 System.out.println("Exception while writing: " + e);
             }
+            System.out.println("Wrote to " + resource.getName());
         } catch (IOException e) {
             e.printStackTrace();
         }
